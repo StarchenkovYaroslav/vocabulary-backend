@@ -7,6 +7,8 @@ import { WordRepository } from '../word/word.repository'
 import { TranslationRepository } from '../translation/translation.repository'
 import { CreateMeaningDto } from './dto/create-meaning.dto'
 import { AddTranslationDto } from './dto/add-translation.dto'
+import { RemoveTranslationDto } from './dto/remove-translation.dto'
+import { Types } from 'mongoose'
 
 @Injectable()
 export class MeaningService {
@@ -55,5 +57,13 @@ export class MeaningService {
     }
 
     return translation
+  }
+
+  public async removeTranslation(dto: RemoveTranslationDto) {
+    await this.meaningRepository.removeTranslation(dto.meaningId, dto.translationId)
+
+    return {
+      translationId: dto.translationId,
+    }
   }
 }

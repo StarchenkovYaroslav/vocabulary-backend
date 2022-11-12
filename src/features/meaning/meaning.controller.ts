@@ -3,6 +3,7 @@ import { MeaningService } from './meaning.service'
 import { ValidationPipe } from '../../pipes/validation.pipe'
 import { CreateMeaningDto } from './dto/create-meaning.dto'
 import { AddTranslationDto } from './dto/add-translation.dto'
+import { RemoveTranslationDto } from './dto/remove-translation.dto'
 
 @Controller('meanings')
 export class MeaningController {
@@ -18,5 +19,10 @@ export class MeaningController {
   @Post('add-translation')
   public addTranslation(@Body(new ValidationPipe()) dto: AddTranslationDto) {
     return this.service.addTranslation(dto)
+  }
+
+  @Post('remove-translation')
+  public removeTranslation(@Body(new ValidationPipe()) dto: RemoveTranslationDto) {
+    return this.service.removeTranslation(dto)
   }
 }

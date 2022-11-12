@@ -21,4 +21,13 @@ export class MeaningRepository {
   public async getById(id: Types.ObjectId | string): Promise<MeaningDocument | null> {
     return this.model.findById(id)
   }
+
+  public async removeTranslation(
+    meaningId: Types.ObjectId | string,
+    translationId: Types.ObjectId | string,
+  ): Promise<MeaningDocument | null> {
+    return this.model.findByIdAndUpdate(meaningId, {
+      $pull: { translations: translationId }
+    }, { new: true })
+  }
 }
