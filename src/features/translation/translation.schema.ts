@@ -1,5 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
-import { HydratedDocument } from 'mongoose'
+import { HydratedDocument, Types } from 'mongoose'
 import * as mongoose from 'mongoose'
 import { Word } from '../word/word.schema'
 
@@ -11,7 +11,7 @@ export class Translation {
   name: string
 
   @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Word' }] })
-  words: Word[]
+  words: Types.ObjectId[]
 }
 
 export const TranslationSchema = SchemaFactory.createForClass(Translation)

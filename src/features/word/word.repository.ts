@@ -21,7 +21,12 @@ export class WordRepository {
     return this.model.exists({ name })
   }
 
-  public async getById(id: Types.ObjectId | string): Promise<WordDocument | null> {
-    return this.model.findById(id)
+  public async addTranslation(
+    wordId: Types.ObjectId | string,
+    translationId: Types.ObjectId | string,
+  ): Promise<WordDocument | null> {
+    return this.model.findByIdAndUpdate(wordId, {
+      $push: { translations: translationId }
+    }, { new: true })
   }
 }

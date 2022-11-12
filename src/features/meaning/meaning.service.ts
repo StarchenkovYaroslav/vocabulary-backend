@@ -39,16 +39,20 @@ export class MeaningService {
     // TODO: handle
     if (!meaning) throw new Error('no meaning')
 
+    meaning.translations.push(translation._id)
+    await meaning.save()
+
     const card = await this.cardRepository.getById(meaning.card)
 
-    const word = await this.wordRepository.getById(meaning._id)
-
     // TODO: handle
-    //if (!word) throw new Error('no word')
+    if (!card) throw new Error('no card')
 
-    // if (word.translations.includes(translation)) {
-    //
-    // }
+    if (!translation.words.includes(card.word)) {
+      translation.words.push(card.word)
+      await translation.save()
+
+      await this.wordRepository.addTranslation(card.word, translation._id)
+    }
 
     return translation
   }

@@ -25,9 +25,9 @@ export class CardRepository {
   public async addMeaning(
     cardId: Types.ObjectId | string,
     meaningId: Types.ObjectId | string,
-  ): Promise<void> {
-    await this.model.findByIdAndUpdate(cardId, {
+  ): Promise<CardDocument | null> {
+    return  this.model.findByIdAndUpdate(cardId, {
       $push: { meanings: meaningId }
-    })
+    }, { new: true })
   }
 }

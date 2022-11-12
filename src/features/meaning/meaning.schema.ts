@@ -15,10 +15,10 @@ export class Meaning {
     type: mongoose.Schema.Types.ObjectId, ref: 'Card',
     isRequired: true,
   })
-  card: Card | mongoose.Schema.Types.ObjectId
+  card: mongoose.Types.ObjectId
 
   @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Translation' }] })
-  translations: Translation[]
+  translations: mongoose.Types.ObjectId[]
 }
 
 export const MeaningSchema = SchemaFactory.createForClass(Meaning)

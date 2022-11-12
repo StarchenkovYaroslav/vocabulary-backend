@@ -1,5 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
-import { HydratedDocument } from 'mongoose'
+import { HydratedDocument, Types } from 'mongoose'
 import mongoose from 'mongoose'
 import { Word } from '../word/word.schema'
 import { Meaning } from '../meaning/meaning.schema'
@@ -13,7 +13,7 @@ export class Card {
     type: mongoose.Schema.Types.ObjectId, ref: 'Word',
     isRequired: true,
   })
-  word: Word
+  word: Types.ObjectId
 
   @Prop({
     type: mongoose.Schema.Types.ObjectId, ref: 'Vocabulary',
