@@ -8,7 +8,6 @@ import { TranslationRepository } from '../translation/translation.repository'
 import { CreateMeaningDto } from './dto/create-meaning.dto'
 import { AddTranslationDto } from './dto/add-translation.dto'
 import { RemoveTranslationDto } from './dto/remove-translation.dto'
-import { Types } from 'mongoose'
 
 @Injectable()
 export class MeaningService {
@@ -28,6 +27,21 @@ export class MeaningService {
     await this.cardRepository.addMeaning(dto.cardId, meaning._id)
 
     return meaning
+  }
+
+  public async remove(id: string) {
+    const meaning = await this.meaningRepository.getById(id)
+
+    // TODO: handle
+    if (!meaning) throw new Error('no meaning')
+
+    await this.cardRepository.removeMeaning(meaning.card, meaning._id)
+
+    await this.meaningRepository.remove(id)
+
+    return {
+      meaningId: id
+    }
   }
 
   public async addTranslation(dto: AddTranslationDto): Promise<TranslationDocument> {

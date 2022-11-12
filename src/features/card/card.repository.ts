@@ -30,4 +30,13 @@ export class CardRepository {
       $push: { meanings: meaningId }
     }, { new: true })
   }
+
+  public async removeMeaning(
+    cardId: Types.ObjectId | string,
+    meaningId: Types.ObjectId | string,
+  ): Promise<CardDocument | null> {
+    return  this.model.findByIdAndUpdate(cardId, {
+      $pull: { meanings: meaningId }
+    }, { new: true })
+  }
 }
