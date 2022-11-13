@@ -44,13 +44,16 @@ export class MeaningService {
     }
   }
 
-  public async addTranslation(dto: AddTranslationDto): Promise<TranslationDocument> {
+  public async addTranslation(
+    id: string,
+    dto: AddTranslationDto,
+  ): Promise<TranslationDocument> {
     let translation = await this.translationRepository.getByName(dto.translationName)
     if (!translation) translation = await this.translationRepository.create({
       name: dto.translationName
     })
 
-    const meaning = await this.meaningRepository.getById(dto.meaningId)
+    const meaning = await this.meaningRepository.getById(id)
 
     // TODO: handle
     if (!meaning) throw new Error('no meaning')
@@ -73,8 +76,8 @@ export class MeaningService {
     return translation
   }
 
-  public async removeTranslation(dto: RemoveTranslationDto) {
-    await this.meaningRepository.removeTranslation(dto.meaningId, dto.translationId)
+  public async removeTranslation(id: string, dto: RemoveTranslationDto) {
+    await this.meaningRepository.removeTranslation(id, dto.translationId)
 
     return {
       translationId: dto.translationId,

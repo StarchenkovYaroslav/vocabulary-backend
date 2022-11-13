@@ -1,7 +1,7 @@
 import { IsMongoId, IsNotEmpty } from 'class-validator'
 
-export class RemoveTranslationDto {
+export class RemoveTranslationParams {
   @IsNotEmpty()
   @IsMongoId()
-  translationId: string
+  id: string
 }
