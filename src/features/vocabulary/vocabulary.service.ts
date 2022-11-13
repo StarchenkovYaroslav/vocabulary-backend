@@ -25,8 +25,8 @@ export class VocabularyService {
 
     const cards = await this.cardRepository.getByIds(vocabulary.cards)
 
-    const meaningsIds = cards.reduce((meaningsIds, { meanings }) =>
-      ([...meaningsIds, ...meanings]), [])
+    const meaningsIds = cards.reduce((ids, { meanings }) =>
+      [...ids, ...meanings], [])
 
     await this.meaningRepository.removeByIds(meaningsIds)
 
