@@ -15,16 +15,18 @@ export class CardService {
     private readonly meaningRepository: MeaningRepository,
   ) {}
 
-  public async create(dto: CreateCardDto): Promise<CardDocument> {
-    let word = await this.wordRepository.existsByName(dto.wordName)
-    if (!word) word = await this.wordRepository.create({ name: dto.wordName })
+  public async create(
+    { wordName, vocabularyId }: CreateCardDto,
+  ): Promise<CardDocument> {
+    let word = await this.wordRepository.existsByName(wordName)
+    if (!word) word = await this.wordRepository.create({ name: wordName })
 
     const card = await this.cardRepository.create({
       word: word._id,
-      vocabulary: dto.vocabularyId,
+      vocabulary: vocabularyId,
     })
 
-    await this.vocabularyRepository.addCard(dto.vocabularyId, card._id)
+    await this.vocabularyRepository.addCard(vocabularyId, card._id)
 
     return card
   }

@@ -18,13 +18,15 @@ export class MeaningService {
     private readonly wordRepository: WordRepository,
   ) {}
 
-  public async create(dto: CreateMeaningDto): Promise<MeaningDocument> {
+  public async create(
+    { name, cardId }: CreateMeaningDto,
+  ): Promise<MeaningDocument> {
     const meaning = await this.meaningRepository.create({
-      name: dto.name,
-      card: dto.cardId,
+      name: name,
+      card: cardId,
     })
 
-    await this.cardRepository.addMeaning(dto.cardId, meaning._id)
+    await this.cardRepository.addMeaning(cardId, meaning._id)
 
     return meaning
   }
@@ -46,11 +48,11 @@ export class MeaningService {
 
   public async addTranslation(
     id: string,
-    dto: AddTranslationDto,
+    { translationName }: AddTranslationDto,
   ): Promise<TranslationDocument> {
-    let translation = await this.translationRepository.getByName(dto.translationName)
+    let translation = await this.translationRepository.getByName(translationName)
     if (!translation) translation = await this.translationRepository.create({
-      name: dto.translationName
+      name: translationName
     })
 
     const meaning = await this.meaningRepository.getById(id)
@@ -76,11 +78,14 @@ export class MeaningService {
     return translation
   }
 
-  public async removeTranslation(id: string, dto: RemoveTranslationDto) {
-    await this.meaningRepository.removeTranslation(id, dto.translationId)
+  public async removeTranslation(
+    id: string,
+    { translationId }: RemoveTranslationDto,
+  ) {
+    await this.meaningRepository.removeTranslation(id, translationId)
 
     return {
-      translationId: dto.translationId,
+      translationId: translationId,
     }
   }
 }
