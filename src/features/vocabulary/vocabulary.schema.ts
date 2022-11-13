@@ -13,7 +13,7 @@ export class Vocabulary {
   @Prop({
     type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Card' }],
   })
-  cards: Card[]
+  cards: mongoose.Types.ObjectId[]
 }
 
 export const VocabularySchema = SchemaFactory.createForClass(Vocabulary)

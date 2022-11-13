@@ -22,6 +22,14 @@ export class CardRepository {
     return this.model.findById(id)
   }
 
+  public async getByIds(ids: Types.ObjectId[] | string[]): Promise<CardDocument[]> {
+    return this.model.find({ id: { $in: ids }})
+  }
+
+  public async removeByIds(ids: Types.ObjectId[] | string[]): Promise<void> {
+    await this.model.deleteMany({ _id: { $in: ids } })
+  }
+
   public async addMeaning(
     cardId: Types.ObjectId | string,
     meaningId: Types.ObjectId | string,

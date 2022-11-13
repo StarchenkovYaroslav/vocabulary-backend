@@ -17,6 +17,10 @@ export class VocabularyRepository {
     return this.model.create(data)
   }
 
+  public async getById(id: Types.ObjectId | string): Promise<VocabularyDocument | null> {
+    return this.model.findById(id)
+  }
+
   public async addCard(
     vocabularyId: Types.ObjectId | string,
     cardId: Types.ObjectId | string

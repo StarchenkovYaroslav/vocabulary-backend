@@ -4,7 +4,7 @@ import { Model, Types } from 'mongoose'
 import { Meaning, MeaningDocument } from './meaning.schema'
 
 interface CreationData {
-  name: Types.ObjectId | string,
+  name: string,
   card: Types.ObjectId | string,
 }
 
@@ -26,8 +26,8 @@ export class MeaningRepository {
     return this.model.findById(id)
   }
 
-  public async removeByIds(meaningsIds: Types.ObjectId[]  | string[]): Promise<void> {
-    await this.model.deleteMany({ _id: { $in: meaningsIds } })
+  public async removeByIds(ids: Types.ObjectId[]  | string[]): Promise<void> {
+    await this.model.deleteMany({ _id: { $in: ids } })
   }
 
   public async removeTranslation(
