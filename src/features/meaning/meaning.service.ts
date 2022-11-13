@@ -37,7 +37,7 @@ export class MeaningService {
 
     await this.cardRepository.removeMeaning(meaning.card, meaning._id)
 
-    await this.meaningRepository.remove(id)
+    await meaning.remove()
 
     return {
       meaningId: id

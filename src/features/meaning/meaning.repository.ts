@@ -18,10 +18,6 @@ export class MeaningRepository {
     return this.model.create(data)
   }
 
-  public async remove(id: Types.ObjectId | string): Promise<MeaningDocument | null> {
-    return this.model.findByIdAndRemove(id)
-  }
-
   public async getById(id: Types.ObjectId | string): Promise<MeaningDocument | null> {
     return this.model.findById(id)
   }
