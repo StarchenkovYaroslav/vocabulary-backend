@@ -15,7 +15,7 @@ export class CardController {
   }
 
   @Delete(':id')
-  public remove(@Param() params: RemoveCardParams) {
-    return this.service.remove(params.id)
+  public remove(@Param() { id }: RemoveCardParams) {
+    return this.service.remove(id)
   }
 }

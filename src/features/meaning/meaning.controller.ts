@@ -19,23 +19,23 @@ export class MeaningController {
   }
 
   @Delete(':id')
-  public remove(@Param() params: RemoveMeaningParams) {
-    return this.service.remove(params.id)
+  public remove(@Param() { id }: RemoveMeaningParams) {
+    return this.service.remove(id)
   }
 
   @Put(':id/translations')
   public addTranslation(
-    @Param() params: AddTranslationParams,
+    @Param() { id }: AddTranslationParams,
     @Body() dto: AddTranslationDto,
   ) {
-    return this.service.addTranslation(params.id, dto)
+    return this.service.addTranslation(id, dto)
   }
 
   @Delete(':id/translations')
   public removeTranslation(
-    @Param() params: RemoveTranslationParams,
+    @Param() { id }: RemoveTranslationParams,
     @Body() dto: RemoveTranslationDto,
   ) {
-    return this.service.removeTranslation(params.id, dto)
+    return this.service.removeTranslation(id, dto)
   }
 }

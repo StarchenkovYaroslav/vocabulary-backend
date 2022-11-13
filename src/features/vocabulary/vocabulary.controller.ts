@@ -15,7 +15,7 @@ export class VocabularyController {
   }
 
   @Delete(':id')
-  public remove(@Param() params: RemoveVocabularyParams) {
-    return this.service.remove(params.id)
+  public remove(@Param() { id }: RemoveVocabularyParams) {
+    return this.service.remove(id)
   }
 }
