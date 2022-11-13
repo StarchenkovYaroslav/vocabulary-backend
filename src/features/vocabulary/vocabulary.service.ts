@@ -20,9 +20,6 @@ export class VocabularyService {
   public async remove(id: string) {
     const vocabulary = await this.vocabularyRepository.getById(id)
 
-    // TODO: handle
-    if (!vocabulary) throw new Error('no vocabulary')
-
     const cards = await this.cardRepository.getByIds(vocabulary.cards)
 
     const meaningsIds = cards.reduce((ids, { meanings }) =>

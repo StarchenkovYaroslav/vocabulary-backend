@@ -1,5 +1,6 @@
-import { Injectable } from '@nestjs/common'
+import { Injectable, NotFoundException } from '@nestjs/common'
 import { InjectModel } from '@nestjs/mongoose'
+import { Message } from '../../constants/messages'
 import { Model } from 'mongoose'
 import { Translation, TranslationDocument } from './translation.schema'
 
@@ -17,7 +18,8 @@ export class TranslationRepository {
     return this.model.create(data)
   }
 
-  public async getByName(name: string): Promise<TranslationDocument | null> {
+  public async getByName(name: string): Promise<TranslationDocument> {
     return this.model.findOne({ name })
+      .orFail(new NotFoundException(Message.TRANSLATION_NOT_FOUND))
   }
 }

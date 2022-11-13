@@ -34,9 +34,6 @@ export class MeaningService {
   public async remove(id: string) {
     const meaning = await this.meaningRepository.getById(id)
 
-    // TODO: handle
-    if (!meaning) throw new Error('no meaning')
-
     await this.cardRepository.removeMeaning(meaning.card, meaning._id)
 
     await meaning.remove()
@@ -57,16 +54,10 @@ export class MeaningService {
 
     const meaning = await this.meaningRepository.getById(id)
 
-    // TODO: handle
-    if (!meaning) throw new Error('no meaning')
-
     meaning.translations.push(translation._id)
     await meaning.save()
 
     const card = await this.cardRepository.getById(meaning.card)
-
-    // TODO: handle
-    if (!card) throw new Error('no card')
 
     if (!translation.words.includes(card.word)) {
       translation.words.push(card.word)

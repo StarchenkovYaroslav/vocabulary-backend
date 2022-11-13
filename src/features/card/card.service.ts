@@ -34,9 +34,6 @@ export class CardService {
   public async remove(id: string) {
     const card = await this.cardRepository.getById(id)
 
-    // TODO: handle
-    if (!card) throw new Error('no card')
-
     await this.meaningRepository.removeByIds(card.meanings)
 
     await this.vocabularyRepository.removeCard(card.vocabulary, card._id)

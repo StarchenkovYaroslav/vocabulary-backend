@@ -1,5 +1,6 @@
-import { Injectable } from '@nestjs/common'
+import { Injectable, NotFoundException } from '@nestjs/common'
 import { InjectModel } from '@nestjs/mongoose'
+import { Message } from '../../constants/messages'
 import { Model, Types } from 'mongoose'
 import { Card, CardDocument } from './card.schema'
 
@@ -18,8 +19,9 @@ export class CardRepository {
     return this.model.create(data)
   }
 
-  public async getById(id: Types.ObjectId | string): Promise<CardDocument | null> {
+  public async getById(id: Types.ObjectId | string): Promise<CardDocument> {
     return this.model.findById(id)
+      .orFail(new NotFoundException(Message.CARD_NOT_FOUND))
   }
 
   public async getByIds(ids: Types.ObjectId[] | string[]): Promise<CardDocument[]> {
@@ -33,18 +35,24 @@ export class CardRepository {
   public async addMeaning(
     cardId: Types.ObjectId | string,
     meaningId: Types.ObjectId | string,
-  ): Promise<CardDocument | null> {
-    return  this.model.findByIdAndUpdate(cardId, {
-      $push: { meanings: meaningId }
-    }, { new: true })
+  ): Promise<CardDocument> {
+    return  this.model.findByIdAndUpdate(
+      cardId,
+      { $push: { meanings: meaningId } },
+      { new: true }
+      )
+      .orFail(new NotFoundException(Message.CARD_NOT_FOUND))
   }
 
   public async removeMeaning(
     cardId: Types.ObjectId | string,
     meaningId: Types.ObjectId | string,
-  ): Promise<CardDocument | null> {
-    return  this.model.findByIdAndUpdate(cardId, {
-      $pull: { meanings: meaningId }
-    }, { new: true })
+  ): Promise<CardDocument> {
+    return  this.model.findByIdAndUpdate(
+      cardId,
+      { $pull: { meanings: meaningId } },
+      { new: true },
+      )
+      .orFail(new NotFoundException(Message.CARD_NOT_FOUND))
   }
 }
