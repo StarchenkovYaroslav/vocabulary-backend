@@ -26,6 +26,10 @@ export class MeaningRepository {
     return this.model.findById(id)
   }
 
+  public async removeByIds(meaningsIds: Types.ObjectId[]  | string[]): Promise<void> {
+    await this.model.deleteMany({ _id: { $in: meaningsIds } })
+  }
+
   public async removeTranslation(
     meaningId: Types.ObjectId | string,
     translationId: Types.ObjectId | string,
@@ -34,4 +38,5 @@ export class MeaningRepository {
       $pull: { translations: translationId }
     }, { new: true })
   }
+
 }

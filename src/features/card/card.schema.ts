@@ -19,10 +19,10 @@ export class Card {
     type: mongoose.Schema.Types.ObjectId, ref: 'Vocabulary',
     isRequired: true,
   })
-  vocabulary: Vocabulary
+  vocabulary: mongoose.Types.ObjectId
 
   @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Meaning' }] })
-  meanings: Meaning[]
+  meanings: mongoose.Types.ObjectId[]
 }
 
 export const CardSchema = SchemaFactory.createForClass(Card)

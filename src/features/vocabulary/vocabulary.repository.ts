@@ -20,9 +20,18 @@ export class VocabularyRepository {
   public async addCard(
     vocabularyId: Types.ObjectId | string,
     cardId: Types.ObjectId | string
-  ): Promise<void> {
-    await this.model.findByIdAndUpdate(vocabularyId, {
+  ): Promise<VocabularyDocument | null> {
+    return this.model.findByIdAndUpdate(vocabularyId, {
       $push: { cards: cardId }
-    })
+    }, { new: true })
+  }
+
+  public async removeCard(
+    vocabularyId: Types.ObjectId | string,
+    cardId: Types.ObjectId | string
+  ): Promise<VocabularyDocument | null> {
+    return this.model.findByIdAndUpdate(vocabularyId, {
+      $pull: { cards: cardId }
+    }, { new: true })
   }
 }
