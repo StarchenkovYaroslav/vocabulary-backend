@@ -53,11 +53,13 @@ export class MeaningService {
     id: string,
     { translationName }: AddTranslationDto,
   ): Promise<TranslationDocument> {
+    // find meaning first to avoid futile translation creation
+    const meaning = await this.meaningRepository.getById(id)
+
     const translation =
       await this.translationRepository.getByNameOrNull(translationName)
       || await this.translationRepository.create({ name: translationName })
 
-    const meaning = await this.meaningRepository.getById(id)
     if (meaning.translations.some(id => id.equals(translation._id))) {
       throw new ConflictException(Message.TRANSLATION_EXISTS_IN_MEANING)
     }

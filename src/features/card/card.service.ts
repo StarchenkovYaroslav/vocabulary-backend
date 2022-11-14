@@ -19,11 +19,12 @@ export class CardService {
   public async create(
     { wordName, vocabularyId }: CreateCardDto,
   ): Promise<CardDocument> {
+    // find vocabulary first to avoid futile word creation
+    const vocabulary = await this.vocabularyRepository.getById(vocabularyId)
+
     const word =
       await this.wordRepository.existsByName(wordName)
       || await this.wordRepository.create({ name: wordName })
-
-    const vocabulary = await this.vocabularyRepository.getById(vocabularyId)
 
     const cards = await this.cardRepository.getByIds(vocabulary.cards)
     if (cards.some(card => card.word.equals(word._id))) {
