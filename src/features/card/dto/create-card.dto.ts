@@ -5,7 +5,6 @@ export class CreateCardDto {
   @IsString()
   wordName: string
 
-  @IsNotEmpty()
   @IsMongoId()
   vocabularyId: string
 }

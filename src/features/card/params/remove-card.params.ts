@@ -1,7 +1,6 @@
-import { IsMongoId, IsNotEmpty } from 'class-validator'
+import { IsMongoId } from 'class-validator'
 
 export class RemoveCardParams {
-  @IsNotEmpty()
   @IsMongoId()
   id: string
 }
