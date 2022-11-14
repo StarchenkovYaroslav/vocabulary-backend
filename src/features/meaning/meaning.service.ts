@@ -1,7 +1,5 @@
 import { ConflictException, Injectable } from '@nestjs/common'
 import { Message } from '../../constants/messages'
-import { MeaningDocument } from './meaning.schema'
-import { TranslationDocument } from '../translation/translation.schema'
 import { MeaningRepository } from './meaning.repository'
 import { CardRepository } from '../card/card.repository'
 import { WordRepository } from '../word/word.repository'
@@ -9,6 +7,10 @@ import { TranslationRepository } from '../translation/translation.repository'
 import { CreateMeaningDto } from './dto/create-meaning.dto'
 import { AddTranslationDto } from './dto/add-translation.dto'
 import { RemoveTranslationDto } from './dto/remove-translation.dto'
+import { CreateMeaningResponse } from './response/create-meaning.response'
+import { RemoveMeaningResponse } from './response/remove-meaning.response'
+import { AddTranslationResponse } from './response/add-translation.response'
+import { RemoveTranslationResponse } from './response/remove-translation.response'
 
 @Injectable()
 export class MeaningService {
@@ -21,7 +23,7 @@ export class MeaningService {
 
   public async create(
     { name, cardId }: CreateMeaningDto,
-  ): Promise<MeaningDocument> {
+  ): Promise<CreateMeaningResponse> {
     const card = await this.cardRepository.getById(cardId)
 
     const meanings = await this.meaningRepository.getByIds(card.meanings)
@@ -37,7 +39,7 @@ export class MeaningService {
     return meaning
   }
 
-  public async remove(id: string) {
+  public async remove(id: string): Promise<RemoveMeaningResponse> {
     const meaning = await this.meaningRepository.getById(id)
 
     await this.cardRepository.removeMeaning(meaning.card, meaning._id)
@@ -52,7 +54,7 @@ export class MeaningService {
   public async addTranslation(
     id: string,
     { translationName }: AddTranslationDto,
-  ): Promise<TranslationDocument> {
+  ): Promise<AddTranslationResponse> {
     // find meaning first to avoid futile translation creation
     const meaning = await this.meaningRepository.getById(id)
 
@@ -82,7 +84,7 @@ export class MeaningService {
   public async removeTranslation(
     id: string,
     { translationId }: RemoveTranslationDto,
-  ) {
+  ): Promise<RemoveTranslationResponse> {
     await this.meaningRepository.removeTranslation(id, translationId)
 
     return {

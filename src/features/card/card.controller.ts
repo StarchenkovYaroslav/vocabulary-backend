@@ -2,6 +2,8 @@ import { Body, Controller, Delete, Param, Post } from '@nestjs/common'
 import { CardService } from './card.service'
 import { CreateCardDto } from './dto/create-card.dto'
 import { RemoveCardParams } from './params/remove-card.params'
+import { CreateCardResponse } from './response/create-card.response'
+import { RemoveCardResponse } from './response/remove-card.response'
 
 @Controller('cards')
 export class CardController {
@@ -10,12 +12,12 @@ export class CardController {
   ) {}
 
   @Post()
-  public create(@Body() dto: CreateCardDto) {
+  public create(@Body() dto: CreateCardDto): Promise<CreateCardResponse> {
     return this.service.create(dto)
   }
 
   @Delete(':id')
-  public remove(@Param() { id }: RemoveCardParams) {
+  public remove(@Param() { id }: RemoveCardParams): Promise<RemoveCardResponse> {
     return this.service.remove(id)
   }
 }

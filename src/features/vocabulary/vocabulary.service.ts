@@ -3,8 +3,9 @@ import { Message } from '../../constants/messages'
 import { VocabularyRepository } from './vocabulary.repository'
 import { CardRepository } from '../card/card.repository'
 import { MeaningRepository } from '../meaning/meaning.repository'
-import { VocabularyDocument } from './vocabulary.schema'
 import { CreateVocabularyDto } from './dto/create-vocabulary.dto'
+import { CreateVocabularyResponse } from './response/create-vocabulary.response'
+import { RemoveVocabularyResponse } from './response/remove-vocabulary.response'
 
 @Injectable()
 export class VocabularyService {
@@ -16,7 +17,7 @@ export class VocabularyService {
 
   public async create(
     { name }: CreateVocabularyDto
-  ): Promise<VocabularyDocument> {
+  ): Promise<CreateVocabularyResponse> {
     if (await this.vocabularyRepository.existsByName(name)) {
       throw new ConflictException(Message.VOCABULARY_NAME_TAKEN)
     }
@@ -24,7 +25,7 @@ export class VocabularyService {
     return this.vocabularyRepository.create({ name })
   }
 
-  public async remove(id: string) {
+  public async remove(id: string): Promise<RemoveVocabularyResponse> {
     const vocabulary = await this.vocabularyRepository.getById(id)
 
     const cards = await this.cardRepository.getByIds(vocabulary.cards)

@@ -2,10 +2,11 @@ import { ConflictException, Injectable } from '@nestjs/common'
 import { Message } from '../../constants/messages'
 import { CardRepository } from './card.repository'
 import { CreateCardDto } from './dto/create-card.dto'
-import { CardDocument } from './card.schema'
 import { WordRepository } from '../word/word.repository'
 import { VocabularyRepository } from '../vocabulary/vocabulary.repository'
 import { MeaningRepository } from '../meaning/meaning.repository'
+import { CreateCardResponse } from './response/create-card.response'
+import { RemoveCardResponse } from './response/remove-card.response'
 
 @Injectable()
 export class CardService {
@@ -18,7 +19,7 @@ export class CardService {
 
   public async create(
     { wordName, vocabularyId }: CreateCardDto,
-  ): Promise<CardDocument> {
+  ): Promise<CreateCardResponse> {
     // find vocabulary first to avoid futile word creation
     const vocabulary = await this.vocabularyRepository.getById(vocabularyId)
 
@@ -41,7 +42,7 @@ export class CardService {
     return card
   }
 
-  public async remove(id: string) {
+  public async remove(id: string): Promise<RemoveCardResponse> {
     const card = await this.cardRepository.getById(id)
 
     await this.meaningRepository.removeByIds(card.meanings)
