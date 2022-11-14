@@ -1,4 +1,5 @@
-import { Injectable } from '@nestjs/common'
+import { ConflictException, Injectable } from '@nestjs/common'
+import { Message } from '../../constants/messages'
 import { CardRepository } from './card.repository'
 import { CreateCardDto } from './dto/create-card.dto'
 import { CardDocument } from './card.schema'
@@ -18,8 +19,16 @@ export class CardService {
   public async create(
     { wordName, vocabularyId }: CreateCardDto,
   ): Promise<CardDocument> {
-    let word = await this.wordRepository.existsByName(wordName)
-    if (!word) word = await this.wordRepository.create({ name: wordName })
+    const word =
+      await this.wordRepository.existsByName(wordName)
+      || await this.wordRepository.create({ name: wordName })
+
+    const vocabulary = await this.vocabularyRepository.getById(vocabularyId)
+
+    const cards = await this.cardRepository.getByIds(vocabulary.cards)
+    if (cards.some(card => card.word.equals(word._id))) {
+      throw new ConflictException(Message.WORD_EXISTS_IN_VOCABULARY)
+    }
 
     const card = await this.cardRepository.create({
       word: word._id,

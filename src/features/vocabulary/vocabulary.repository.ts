@@ -23,6 +23,10 @@ export class VocabularyRepository {
       .orFail(new NotFoundException(Message.VOCABULARY_NOT_FOUND))
   }
 
+  public async existsByName(name: string) {
+    return this.model.exists({ name })
+  }
+
   public async addCard(
     vocabularyId: Types.ObjectId | string,
     cardId: Types.ObjectId | string

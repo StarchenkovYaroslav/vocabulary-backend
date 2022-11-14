@@ -1,4 +1,5 @@
-import { Injectable } from '@nestjs/common'
+import { ConflictException, Injectable } from '@nestjs/common'
+import { Message } from '../../constants/messages'
 import { MeaningDocument } from './meaning.schema'
 import { TranslationDocument } from '../translation/translation.schema'
 import { MeaningRepository } from './meaning.repository'
@@ -21,12 +22,17 @@ export class MeaningService {
   public async create(
     { name, cardId }: CreateMeaningDto,
   ): Promise<MeaningDocument> {
-    const meaning = await this.meaningRepository.create({
-      name: name,
-      card: cardId,
-    })
+    const card = await this.cardRepository.getById(cardId)
 
-    await this.cardRepository.addMeaning(cardId, meaning._id)
+    const meanings = await this.meaningRepository.getByIds(card.meanings)
+    if (meanings.some(meaning => meaning.name === name)) {
+      throw new ConflictException(Message.MEANING_EXISTS_IN_CARD)
+    }
+
+    const meaning = await this.meaningRepository.create({ name, card: cardId })
+
+    card.meanings.push(meaning._id)
+    await card.save()
 
     return meaning
   }
@@ -47,12 +53,14 @@ export class MeaningService {
     id: string,
     { translationName }: AddTranslationDto,
   ): Promise<TranslationDocument> {
-    let translation = await this.translationRepository.getByName(translationName)
-    if (!translation) translation = await this.translationRepository.create({
-      name: translationName
-    })
+    const translation =
+      await this.translationRepository.getByNameOrNull(translationName)
+      || await this.translationRepository.create({ name: translationName })
 
     const meaning = await this.meaningRepository.getById(id)
+    if (meaning.translations.some(id => id.equals(translation._id))) {
+      throw new ConflictException(Message.TRANSLATION_EXISTS_IN_MEANING)
+    }
 
     meaning.translations.push(translation._id)
     await meaning.save()

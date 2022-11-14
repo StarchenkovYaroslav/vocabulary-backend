@@ -1,4 +1,5 @@
-import { Injectable } from '@nestjs/common'
+import { ConflictException, Injectable } from '@nestjs/common'
+import { Message } from '../../constants/messages'
 import { VocabularyRepository } from './vocabulary.repository'
 import { CardRepository } from '../card/card.repository'
 import { MeaningRepository } from '../meaning/meaning.repository'
@@ -13,8 +14,14 @@ export class VocabularyService {
     private readonly meaningRepository: MeaningRepository,
   ) {}
 
-  public async create(dto: CreateVocabularyDto): Promise<VocabularyDocument> {
-    return this.vocabularyRepository.create(dto)
+  public async create(
+    { name }: CreateVocabularyDto
+  ): Promise<VocabularyDocument> {
+    if (await this.vocabularyRepository.existsByName(name)) {
+      throw new ConflictException(Message.VOCABULARY_NAME_TAKEN)
+    }
+
+    return this.vocabularyRepository.create({ name })
   }
 
   public async remove(id: string) {

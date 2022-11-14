@@ -32,18 +32,6 @@ export class CardRepository {
     await this.model.deleteMany({ _id: { $in: ids } })
   }
 
-  public async addMeaning(
-    cardId: Types.ObjectId | string,
-    meaningId: Types.ObjectId | string,
-  ): Promise<CardDocument> {
-    return  this.model.findByIdAndUpdate(
-      cardId,
-      { $push: { meanings: meaningId } },
-      { new: true }
-      )
-      .orFail(new NotFoundException(Message.CARD_NOT_FOUND))
-  }
-
   public async removeMeaning(
     cardId: Types.ObjectId | string,
     meaningId: Types.ObjectId | string,

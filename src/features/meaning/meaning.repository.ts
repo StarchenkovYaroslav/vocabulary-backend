@@ -24,6 +24,10 @@ export class MeaningRepository {
       .orFail(new NotFoundException(Message.MEANING_NOT_FOUND))
   }
 
+  public async getByIds(ids: Types.ObjectId[] | string[]): Promise<MeaningDocument[]> {
+    return this.model.find({ _id: { $in: ids } })
+  }
+
   public async removeByIds(ids: Types.ObjectId[]  | string[]): Promise<void> {
     await this.model.deleteMany({ _id: { $in: ids } })
   }
