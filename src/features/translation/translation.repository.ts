@@ -17,7 +17,7 @@ export class TranslationRepository {
     return this.model.create(data)
   }
 
-  public async getByName(name: string): Promise<TranslationDocument | null> {
+  public async getByNameOrNull(name: string): Promise<TranslationDocument | null> {
     return this.model.findOne({ name })
   }
 }

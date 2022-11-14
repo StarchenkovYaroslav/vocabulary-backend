@@ -1,5 +1,6 @@
-import { Injectable } from '@nestjs/common'
+import { Injectable, NotFoundException } from '@nestjs/common'
 import { InjectModel } from '@nestjs/mongoose'
+import { Message } from '../../constants/messages'
 import { Model, Types } from 'mongoose'
 import { Word, WordDocument } from './word.schema'
 
@@ -24,9 +25,12 @@ export class WordRepository {
   public async addTranslation(
     wordId: Types.ObjectId | string,
     translationId: Types.ObjectId | string,
-  ): Promise<WordDocument | null> {
-    return this.model.findByIdAndUpdate(wordId, {
-      $push: { translations: translationId }
-    }, { new: true })
+  ): Promise<WordDocument> {
+    return this.model.findByIdAndUpdate(
+      wordId,
+      { $push: { translations: translationId } },
+      { new: true }
+      )
+      .orFail(new NotFoundException(Message.WORD_NOT_FOUND))
   }
 }

@@ -7,7 +7,10 @@ export type VocabularyDocument = HydratedDocument<Vocabulary>
 
 @Schema()
 export class Vocabulary {
-  @Prop({ isRequired: true })
+  @Prop({
+    isRequired: true,
+    unique: true,
+  })
   name: string
 
   @Prop({
