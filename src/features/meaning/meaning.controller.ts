@@ -1,4 +1,5 @@
 import { Body, Controller, Delete, Param, Post, Put } from '@nestjs/common'
+import { ApiTags } from '@nestjs/swagger'
 import { MeaningService } from './meaning.service'
 import { CreateMeaningDto } from './dto/create-meaning.dto'
 import { AddTranslationDto } from './dto/add-translation.dto'
@@ -12,6 +13,7 @@ import { AddTranslationResponse } from './response/add-translation.response'
 import { RemoveTranslationResponse } from './response/remove-translation.response'
 
 @Controller('meanings')
+@ApiTags('meanings')
 export class MeaningController {
   public constructor(
     private readonly service: MeaningService
