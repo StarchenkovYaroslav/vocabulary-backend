@@ -23,7 +23,7 @@ export class VocabularyRepository {
       .orFail(new NotFoundException(Message.VOCABULARY_NOT_FOUND))
   }
 
-  public async existsByName(name: string) {
+  public async existsByName(name: string): Promise<{ _id: Types.ObjectId } | null> {
     return this.model.exists({ name })
   }
 

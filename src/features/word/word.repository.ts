@@ -18,8 +18,8 @@ export class WordRepository {
     return this.model.create(data)
   }
 
-  public async existsByName(name: string) {
-    return this.model.exists({ name })
+  public async getByName(name: string): Promise<WordDocument | null> {
+    return this.model.findOne({ name })
   }
 
   public async addTranslation(

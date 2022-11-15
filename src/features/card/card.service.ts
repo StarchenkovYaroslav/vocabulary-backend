@@ -24,7 +24,7 @@ export class CardService {
     const vocabulary = await this.vocabularyRepository.getById(vocabularyId)
 
     const word =
-      await this.wordRepository.existsByName(wordName)
+      await this.wordRepository.getByName(wordName)
       || await this.wordRepository.create({ name: wordName })
 
     const cards = await this.cardRepository.getByIds(vocabulary.cards)
