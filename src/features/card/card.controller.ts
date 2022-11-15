@@ -1,4 +1,5 @@
 import { Body, Controller, Delete, Param, Post } from '@nestjs/common'
+import { ApiTags } from '@nestjs/swagger'
 import { CardService } from './card.service'
 import { CreateCardDto } from './dto/create-card.dto'
 import { RemoveCardParams } from './params/remove-card.params'
@@ -6,6 +7,7 @@ import { CreateCardResponse } from './response/create-card.response'
 import { RemoveCardResponse } from './response/remove-card.response'
 
 @Controller('cards')
+@ApiTags('cards')
 export class CardController {
   public constructor(
     private readonly service: CardService
