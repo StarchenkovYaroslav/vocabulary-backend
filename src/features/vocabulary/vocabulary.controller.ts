@@ -9,17 +9,19 @@ import { RemoveVocabularyResponse } from './response/remove-vocabulary.response'
 @Controller('vocabularies')
 @ApiTags('vocabularies')
 export class VocabularyController {
-  public constructor(
-    private readonly service: VocabularyService
-  ) {}
+  public constructor(private readonly service: VocabularyService) {}
 
   @Post()
-  public create(@Body() dto: CreateVocabularyDto): Promise<CreateVocabularyResponse> {
+  public create(
+    @Body() dto: CreateVocabularyDto,
+  ): Promise<CreateVocabularyResponse> {
     return this.service.create(dto)
   }
 
   @Delete(':id')
-  public remove(@Param() { id }: RemoveVocabularyParams): Promise<RemoveVocabularyResponse> {
+  public remove(
+    @Param() { id }: RemoveVocabularyParams,
+  ): Promise<RemoveVocabularyResponse> {
     return this.service.remove(id)
   }
 }

@@ -17,18 +17,19 @@ export class CardService {
     private readonly meaningRepository: MeaningRepository,
   ) {}
 
-  public async create(
-    { wordName, vocabularyId }: CreateCardDto,
-  ): Promise<CreateCardResponse> {
+  public async create({
+    wordName,
+    vocabularyId,
+  }: CreateCardDto): Promise<CreateCardResponse> {
     // find vocabulary first to avoid futile word creation
     const vocabulary = await this.vocabularyRepository.getById(vocabularyId)
 
     const word =
-      await this.wordRepository.getByName(wordName)
-      || await this.wordRepository.create({ name: wordName })
+      (await this.wordRepository.getByName(wordName)) ||
+      (await this.wordRepository.create({ name: wordName }))
 
     const cards = await this.cardRepository.getByIds(vocabulary.cards)
-    if (cards.some(card => card.word.equals(word._id))) {
+    if (cards.some((card) => card.word.equals(word._id))) {
       throw new ConflictException(Message.WORD_EXISTS_IN_VOCABULARY)
     }
 
@@ -56,4 +57,3 @@ export class CardService {
     }
   }
 }
-

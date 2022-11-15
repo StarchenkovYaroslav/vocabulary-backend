@@ -9,9 +9,7 @@ import { RemoveCardResponse } from './response/remove-card.response'
 @Controller('cards')
 @ApiTags('cards')
 export class CardController {
-  public constructor(
-    private readonly service: CardService
-  ) {}
+  public constructor(private readonly service: CardService) {}
 
   @Post()
   public create(@Body() dto: CreateCardDto): Promise<CreateCardResponse> {
@@ -19,7 +17,9 @@ export class CardController {
   }
 
   @Delete(':id')
-  public remove(@Param() { id }: RemoveCardParams): Promise<RemoveCardResponse> {
+  public remove(
+    @Param() { id }: RemoveCardParams,
+  ): Promise<RemoveCardResponse> {
     return this.service.remove(id)
   }
 }

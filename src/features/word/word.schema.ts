@@ -10,7 +10,9 @@ export class Word {
   @Prop({ isRequired: true, unique: true })
   name: string
 
-  @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Translation' }] })
+  @Prop({
+    type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Translation' }],
+  })
   translations: Types.ObjectId[]
 }
 

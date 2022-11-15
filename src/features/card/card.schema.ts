@@ -10,13 +10,15 @@ export type CardDocument = HydratedDocument<Card>
 @Schema()
 export class Card {
   @Prop({
-    type: mongoose.Schema.Types.ObjectId, ref: 'Word',
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Word',
     isRequired: true,
   })
   word: Types.ObjectId
 
   @Prop({
-    type: mongoose.Schema.Types.ObjectId, ref: 'Vocabulary',
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Vocabulary',
     isRequired: true,
   })
   vocabulary: mongoose.Types.ObjectId

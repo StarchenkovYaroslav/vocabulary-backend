@@ -21,13 +21,14 @@ export class MeaningService {
     private readonly wordRepository: WordRepository,
   ) {}
 
-  public async create(
-    { name, cardId }: CreateMeaningDto,
-  ): Promise<CreateMeaningResponse> {
+  public async create({
+    name,
+    cardId,
+  }: CreateMeaningDto): Promise<CreateMeaningResponse> {
     const card = await this.cardRepository.getById(cardId)
 
     const meanings = await this.meaningRepository.getByIds(card.meanings)
-    if (meanings.some(meaning => meaning.name === name)) {
+    if (meanings.some((meaning) => meaning.name === name)) {
       throw new ConflictException(Message.MEANING_EXISTS_IN_CARD)
     }
 
@@ -47,7 +48,7 @@ export class MeaningService {
     await meaning.remove()
 
     return {
-      meaningId: id
+      meaningId: id,
     }
   }
 
@@ -59,10 +60,10 @@ export class MeaningService {
     const meaning = await this.meaningRepository.getById(id)
 
     const translation =
-      await this.translationRepository.getByNameOrNull(translationName)
-      || await this.translationRepository.create({ name: translationName })
+      (await this.translationRepository.getByNameOrNull(translationName)) ||
+      (await this.translationRepository.create({ name: translationName }))
 
-    if (meaning.translations.some(id => id.equals(translation._id))) {
+    if (meaning.translations.some((id) => id.equals(translation._id))) {
       throw new ConflictException(Message.TRANSLATION_EXISTS_IN_MEANING)
     }
 

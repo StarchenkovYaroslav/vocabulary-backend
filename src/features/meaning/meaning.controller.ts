@@ -15,9 +15,7 @@ import { RemoveTranslationResponse } from './response/remove-translation.respons
 @Controller('meanings')
 @ApiTags('meanings')
 export class MeaningController {
-  public constructor(
-    private readonly service: MeaningService
-  ) {}
+  public constructor(private readonly service: MeaningService) {}
 
   @Post()
   public create(@Body() dto: CreateMeaningDto): Promise<CreateMeaningResponse> {
@@ -25,7 +23,9 @@ export class MeaningController {
   }
 
   @Delete(':id')
-  public remove(@Param() { id }: RemoveMeaningParams): Promise<RemoveMeaningResponse> {
+  public remove(
+    @Param() { id }: RemoveMeaningParams,
+  ): Promise<RemoveMeaningResponse> {
     return this.service.remove(id)
   }
 

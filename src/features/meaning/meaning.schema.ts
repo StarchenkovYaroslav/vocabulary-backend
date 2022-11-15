@@ -12,12 +12,15 @@ export class Meaning {
   name: string
 
   @Prop({
-    type: mongoose.Schema.Types.ObjectId, ref: 'Card',
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Card',
     isRequired: true,
   })
   card: mongoose.Types.ObjectId
 
-  @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Translation' }] })
+  @Prop({
+    type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Translation' }],
+  })
   translations: mongoose.Types.ObjectId[]
 }
 

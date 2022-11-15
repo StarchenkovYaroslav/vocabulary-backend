@@ -15,9 +15,9 @@ export class VocabularyService {
     private readonly meaningRepository: MeaningRepository,
   ) {}
 
-  public async create(
-    { name }: CreateVocabularyDto
-  ): Promise<CreateVocabularyResponse> {
+  public async create({
+    name,
+  }: CreateVocabularyDto): Promise<CreateVocabularyResponse> {
     if (await this.vocabularyRepository.existsByName(name)) {
       throw new ConflictException(Message.VOCABULARY_NAME_TAKEN)
     }
@@ -30,8 +30,10 @@ export class VocabularyService {
 
     const cards = await this.cardRepository.getByIds(vocabulary.cards)
 
-    const meaningsIds = cards.reduce((ids, { meanings }) =>
-      [...ids, ...meanings], [])
+    const meaningsIds = cards.reduce(
+      (ids, { meanings }) => [...ids, ...meanings],
+      [],
+    )
 
     await this.meaningRepository.removeByIds(meaningsIds)
 
@@ -40,7 +42,7 @@ export class VocabularyService {
     await vocabulary.remove()
 
     return {
-      vocabularyId: id
+      vocabularyId: id,
     }
   }
 }

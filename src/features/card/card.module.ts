@@ -13,14 +13,12 @@ import { MeaningRepository } from '../meaning/meaning.repository'
 
 @Module({
   imports: [
-    MongooseModule.forFeature(
-      [
-        { name: Card.name, schema: CardSchema },
-        { name: Word.name, schema: WordSchema },
-        { name: Vocabulary.name, schema: VocabularySchema },
-        { name: Meaning.name, schema: MeaningSchema },
-      ]
-    )
+    MongooseModule.forFeature([
+      { name: Card.name, schema: CardSchema },
+      { name: Word.name, schema: WordSchema },
+      { name: Vocabulary.name, schema: VocabularySchema },
+      { name: Meaning.name, schema: MeaningSchema },
+    ]),
   ],
   controllers: [CardController],
   providers: [

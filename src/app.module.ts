@@ -5,12 +5,7 @@ import { CardModule } from './features/card/card.module'
 import { MeaningModule } from './features/meaning/meaning.module'
 
 @Module({
-  imports: [
-    DbModule,
-    VocabularyModule,
-    CardModule,
-    MeaningModule,
-  ],
+  imports: [DbModule, VocabularyModule, CardModule, MeaningModule],
   controllers: [],
   providers: [],
 })

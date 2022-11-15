@@ -5,13 +5,13 @@ import { Model, Types } from 'mongoose'
 import { Word, WordDocument } from './word.schema'
 
 interface CreationData {
-  name: string,
+  name: string
 }
 
 @Injectable()
 export class WordRepository {
   public constructor(
-    @InjectModel(Word.name) private model: Model<WordDocument>
+    @InjectModel(Word.name) private model: Model<WordDocument>,
   ) {}
 
   public async create(data: CreationData): Promise<WordDocument> {
@@ -26,10 +26,11 @@ export class WordRepository {
     wordId: Types.ObjectId | string,
     translationId: Types.ObjectId | string,
   ): Promise<WordDocument> {
-    return this.model.findByIdAndUpdate(
-      wordId,
-      { $push: { translations: translationId } },
-      { new: true }
+    return this.model
+      .findByIdAndUpdate(
+        wordId,
+        { $push: { translations: translationId } },
+        { new: true },
       )
       .orFail(new NotFoundException(Message.WORD_NOT_FOUND))
   }
