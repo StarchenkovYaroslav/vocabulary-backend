@@ -1,1 +1,3 @@
-# vocabulary-backend
+## vocabulary
+
+words and their translations storage
