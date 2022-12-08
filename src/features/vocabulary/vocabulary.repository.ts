@@ -26,6 +26,23 @@ export class VocabularyRepository {
       .orFail(new NotFoundException(Message.VOCABULARY_NOT_FOUND))
   }
 
+  public async getByIdPopulated(
+    id: Types.ObjectId | string,
+  ): Promise<VocabularyDocument> {
+    return this.model
+      .findById(id)
+      .populate({
+        path: 'cards',
+        populate: {
+          path: 'word meanings',
+          populate: {
+            path: 'translations'
+          }
+        },
+      })
+      .orFail(new NotFoundException(Message.VOCABULARY_NOT_FOUND))
+  }
+
   public async existsByName(
     name: string,
   ): Promise<{ _id: Types.ObjectId } | null> {

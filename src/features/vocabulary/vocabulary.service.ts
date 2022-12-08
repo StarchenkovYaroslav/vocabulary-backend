@@ -47,14 +47,6 @@ export class VocabularyService {
   }
 
   public async getById(id: string) {
-    const vocabulary = await this.vocabularyRepository.getById(id)
-    await vocabulary.populate({
-      path: 'cards',
-      populate: {
-        path: 'word',
-      },
-    })
-
-    return vocabulary
+    return this.vocabularyRepository.getByIdPopulated(id)
   }
 }
