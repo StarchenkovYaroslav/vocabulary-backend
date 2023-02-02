@@ -3,6 +3,7 @@ export enum Message {
   MEANING_NOT_FOUND = 'Meaning not found',
   VOCABULARY_NOT_FOUND = 'Vocabulary not found',
   WORD_NOT_FOUND = 'Word not found',
+  TRANSLATION_NOT_FOUND_IN_MEANING = 'Translation not found in meaning',
 
   VOCABULARY_NAME_TAKEN = 'Vocabulary name taken',
   WORD_EXISTS_IN_VOCABULARY = 'Word exists in vocabulary',
