@@ -27,9 +27,7 @@ export class VocabularyController {
   }
 
   @Get(':id')
-  public getById(
-    @Param() { id }: GetVocabularyByIdParams,
-  ) {
+  public getById(@Param() { id }: GetVocabularyByIdParams) {
     return this.service.getById(id)
   }
 }

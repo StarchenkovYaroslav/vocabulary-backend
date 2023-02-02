@@ -36,8 +36,8 @@ export class VocabularyRepository {
         populate: {
           path: 'word meanings',
           populate: {
-            path: 'translations'
-          }
+            path: 'translations',
+          },
         },
       })
       .orFail(new NotFoundException(Message.VOCABULARY_NOT_FOUND))

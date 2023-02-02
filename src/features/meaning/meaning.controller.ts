@@ -1,4 +1,12 @@
-import { Body, Controller, Delete, Param, Patch, Post, Put } from '@nestjs/common'
+import {
+  Body,
+  Controller,
+  Delete,
+  Param,
+  Patch,
+  Post,
+  Put,
+} from '@nestjs/common'
 import { ApiTags } from '@nestjs/swagger'
 import { MeaningService } from './meaning.service'
 import { CreateMeaningDto } from './dto/create-meaning.dto'

@@ -1,4 +1,8 @@
-import { ConflictException, Injectable, NotFoundException } from '@nestjs/common'
+import {
+  ConflictException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common'
 import { Message } from '../../constants/messages'
 import { TranslationDocument } from '../translation/translation.schema'
 import { MeaningRepository } from './meaning.repository'
@@ -96,7 +100,9 @@ export class MeaningService {
   ): Promise<EditTranslationResponse> {
     const meaning = await this.meaningRepository.getById(id)
 
-    const oldTranslationIndex = meaning.translations.findIndex(id => id.equals(translationId))
+    const oldTranslationIndex = meaning.translations.findIndex((id) =>
+      id.equals(translationId),
+    )
     if (oldTranslationIndex === -1) {
       throw new NotFoundException(Message.TRANSLATION_NOT_FOUND_IN_MEANING)
     }
@@ -117,13 +123,20 @@ export class MeaningService {
     return newTranslation
   }
 
-  private async getOrCreateTranslation(translationName: string): Promise<TranslationDocument> {
-    return (await this.translationRepository.getByNameOrNull(translationName)) ||
+  private async getOrCreateTranslation(
+    translationName: string,
+  ): Promise<TranslationDocument> {
+    return (
+      (await this.translationRepository.getByNameOrNull(translationName)) ||
       (await this.translationRepository.create({ name: translationName }))
+    )
   }
 
-  private async checkTranslationInWord(translation: TranslationDocument, wordId: Types.ObjectId): Promise<void> {
-    if (!translation.words.some(id => id.equals(wordId))) {
+  private async checkTranslationInWord(
+    translation: TranslationDocument,
+    wordId: Types.ObjectId,
+  ): Promise<void> {
+    if (!translation.words.some((id) => id.equals(wordId))) {
       translation.words.push(wordId)
       await translation.save()
 
