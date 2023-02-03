@@ -3,6 +3,7 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common'
+import { Types } from 'mongoose'
 import { Message } from '../../constants/messages'
 import { TranslationDocument } from '../translation/translation.schema'
 import { MeaningRepository } from './meaning.repository'
@@ -13,12 +14,13 @@ import { CreateMeaningDto } from './dto/create-meaning.dto'
 import { AddTranslationDto } from './dto/add-translation.dto'
 import { RemoveTranslationDto } from './dto/remove-translation.dto'
 import { EditTranslationDto } from './dto/edit-translation.dto'
+import { EditMeaningNameDto } from './dto/edit-meaning-name.dto'
 import { CreateMeaningResponse } from './response/create-meaning.response'
 import { RemoveMeaningResponse } from './response/remove-meaning.response'
 import { AddTranslationResponse } from './response/add-translation.response'
 import { RemoveTranslationResponse } from './response/remove-translation.response'
 import { EditTranslationResponse } from './response/edit-translation-response'
-import { Types } from 'mongoose'
+import { EditMeaningNameResponse } from './response/edit-meaning-name.response'
 
 @Injectable()
 export class MeaningService {
@@ -58,6 +60,13 @@ export class MeaningService {
     return {
       meaningId: id,
     }
+  }
+
+  public async editName(
+    id: string,
+    body: EditMeaningNameDto,
+  ): Promise<EditMeaningNameResponse> {
+    return this.meaningRepository.edit(id, body)
   }
 
   public async addTranslation(
