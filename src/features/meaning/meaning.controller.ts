@@ -44,7 +44,7 @@ export class MeaningController {
   }
 
   @Patch(':id')
-  editName(
+  public editName(
     @Param() { id }: EditMeaningNameParams,
     @Body() dto: EditMeaningNameDto,
   ): Promise<EditMeaningNameResponse> {
