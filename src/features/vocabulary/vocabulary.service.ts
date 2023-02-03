@@ -4,6 +4,7 @@ import { VocabularyRepository } from './vocabulary.repository'
 import { CardRepository } from '../card/card.repository'
 import { MeaningRepository } from '../meaning/meaning.repository'
 import { CreateVocabularyDto } from './dto/create-vocabulary.dto'
+import { EditVocabularyNameDto } from './dto/edit-vocabulary-name.dto'
 import { CreateVocabularyResponse } from './response/create-vocabulary.response'
 import { RemoveVocabularyResponse } from './response/remove-vocabulary.response'
 
@@ -44,6 +45,10 @@ export class VocabularyService {
     return {
       vocabularyId: id,
     }
+  }
+
+  public async editName(id: string, dto: EditVocabularyNameDto) {
+    return this.vocabularyRepository.edit(id, dto)
   }
 
   public async getById(id: string) {

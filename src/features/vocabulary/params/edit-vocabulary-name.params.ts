@@ -1,0 +1,12 @@
+import { IsMongoId } from 'class-validator'
+import { ApiProperty } from '@nestjs/swagger'
+import { Example } from '../../../infrastructure/swagger/examples'
+
+export class EditVocabularyNameParams {
+  @IsMongoId()
+  @ApiProperty({
+    example: Example.MONGO_ID,
+    description: '_id of vocabulary to rename',
+  })
+  id: string
+}
