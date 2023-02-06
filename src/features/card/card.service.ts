@@ -84,12 +84,12 @@ export class CardService {
       cardTranslationsIds.map(async (translationId) => {
         if (!word.translations.some((id) => id.equals(translationId))) {
           word.translations.push(translationId)
-          await word.save()
 
           await this.translationRepository.addWord(translationId, word._id)
         }
       }),
     )
+    await word.save()
 
     return word
   }
