@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common'
 import { InjectModel } from '@nestjs/mongoose'
-import { Message } from '../../constants/messages'
 import { Model, Types } from 'mongoose'
+import { Message } from '../../constants/messages'
 import { Vocabulary, VocabularyDocument } from './vocabulary.schema'
 
 interface CreationData {
@@ -23,6 +23,32 @@ export class VocabularyRepository {
   ): Promise<VocabularyDocument> {
     return this.model
       .findById(id)
+      .orFail(new NotFoundException(Message.VOCABULARY_NOT_FOUND))
+  }
+
+  public async getByIdPopulated(
+    id: Types.ObjectId | string,
+  ): Promise<VocabularyDocument> {
+    return this.model
+      .findById(id)
+      .populate({
+        path: 'cards',
+        populate: {
+          path: 'word meanings',
+          populate: {
+            path: 'translations',
+          },
+        },
+      })
+      .orFail(new NotFoundException(Message.VOCABULARY_NOT_FOUND))
+  }
+
+  public async edit(
+    id: Types.ObjectId | string,
+    data: Partial<Vocabulary>,
+  ): Promise<VocabularyDocument> {
+    return this.model
+      .findByIdAndUpdate(id, data, { new: true })
       .orFail(new NotFoundException(Message.VOCABULARY_NOT_FOUND))
   }
 

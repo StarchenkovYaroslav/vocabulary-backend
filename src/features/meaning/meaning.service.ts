@@ -1,5 +1,11 @@
-import { ConflictException, Injectable } from '@nestjs/common'
+import {
+  ConflictException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common'
+import { Types } from 'mongoose'
 import { Message } from '../../constants/messages'
+import { TranslationDocument } from '../translation/translation.schema'
 import { MeaningRepository } from './meaning.repository'
 import { CardRepository } from '../card/card.repository'
 import { WordRepository } from '../word/word.repository'
@@ -7,10 +13,14 @@ import { TranslationRepository } from '../translation/translation.repository'
 import { CreateMeaningDto } from './dto/create-meaning.dto'
 import { AddTranslationDto } from './dto/add-translation.dto'
 import { RemoveTranslationDto } from './dto/remove-translation.dto'
+import { EditTranslationDto } from './dto/edit-translation.dto'
+import { EditMeaningNameDto } from './dto/edit-meaning-name.dto'
 import { CreateMeaningResponse } from './response/create-meaning.response'
 import { RemoveMeaningResponse } from './response/remove-meaning.response'
 import { AddTranslationResponse } from './response/add-translation.response'
 import { RemoveTranslationResponse } from './response/remove-translation.response'
+import { EditTranslationResponse } from './response/edit-translation-response'
+import { EditMeaningNameResponse } from './response/edit-meaning-name.response'
 
 @Injectable()
 export class MeaningService {
@@ -52,6 +62,13 @@ export class MeaningService {
     }
   }
 
+  public async editName(
+    id: string,
+    body: EditMeaningNameDto,
+  ): Promise<EditMeaningNameResponse> {
+    return this.meaningRepository.edit(id, body)
+  }
+
   public async addTranslation(
     id: string,
     { translationName }: AddTranslationDto,
@@ -59,9 +76,7 @@ export class MeaningService {
     // find meaning first to avoid futile translation creation
     const meaning = await this.meaningRepository.getById(id)
 
-    const translation =
-      (await this.translationRepository.getByNameOrNull(translationName)) ||
-      (await this.translationRepository.create({ name: translationName }))
+    const translation = await this.getOrCreateTranslation(translationName)
 
     if (meaning.translations.some((id) => id.equals(translation._id))) {
       throw new ConflictException(Message.TRANSLATION_EXISTS_IN_MEANING)
@@ -72,12 +87,7 @@ export class MeaningService {
 
     const card = await this.cardRepository.getById(meaning.card)
 
-    if (!translation.words.includes(card.word)) {
-      translation.words.push(card.word)
-      await translation.save()
-
-      await this.wordRepository.addTranslation(card.word, translation._id)
-    }
+    await this.checkTranslationInWord(translation, card.word)
 
     return translation
   }
@@ -90,6 +100,56 @@ export class MeaningService {
 
     return {
       translationId: translationId,
+    }
+  }
+
+  public async editTranslation(
+    id: string,
+    { translationId, translationName }: EditTranslationDto,
+  ): Promise<EditTranslationResponse> {
+    const meaning = await this.meaningRepository.getById(id)
+
+    const oldTranslationIndex = meaning.translations.findIndex((id) =>
+      id.equals(translationId),
+    )
+    if (oldTranslationIndex === -1) {
+      throw new NotFoundException(Message.TRANSLATION_NOT_FOUND_IN_MEANING)
+    }
+
+    const newTranslation = await this.getOrCreateTranslation(translationName)
+
+    if (meaning.translations.some((id) => id.equals(newTranslation._id))) {
+      throw new ConflictException(Message.TRANSLATION_EXISTS_IN_MEANING)
+    }
+
+    meaning.translations[oldTranslationIndex] = newTranslation._id
+    await meaning.save()
+
+    const card = await this.cardRepository.getById(meaning.card)
+
+    await this.checkTranslationInWord(newTranslation, card.word)
+
+    return newTranslation
+  }
+
+  private async getOrCreateTranslation(
+    translationName: string,
+  ): Promise<TranslationDocument> {
+    return (
+      (await this.translationRepository.getByNameOrNull(translationName)) ||
+      (await this.translationRepository.create({ name: translationName }))
+    )
+  }
+
+  private async checkTranslationInWord(
+    translation: TranslationDocument,
+    wordId: Types.ObjectId,
+  ): Promise<void> {
+    if (!translation.words.some((id) => id.equals(wordId))) {
+      translation.words.push(wordId)
+      await translation.save()
+
+      await this.wordRepository.addTranslation(wordId, translation._id)
     }
   }
 }

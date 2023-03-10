@@ -19,6 +19,15 @@ export class MeaningRepository {
     return this.model.create(data)
   }
 
+  public async edit(
+    id: Types.ObjectId | string,
+    data: Partial<Meaning>,
+  ): Promise<MeaningDocument> {
+    return this.model
+      .findByIdAndUpdate(id, data, { new: true })
+      .orFail(new NotFoundException(Message.MEANING_NOT_FOUND))
+  }
+
   public async getById(id: Types.ObjectId | string): Promise<MeaningDocument> {
     return this.model
       .findById(id)
