@@ -1,4 +1,4 @@
-# vocabulary-frontend
+# vocabulary-backend
 
 words and their translations storage
 
